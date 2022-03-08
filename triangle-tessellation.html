@@ -1,0 +1,57 @@
+<style>
+canvas {
+    display: block;
+    overflow: hidden;
+}
+</style>
+<script src="p5.min.js"></script>
+<script>
+function setup()
+{
+    let dimension = min(windowWidth, windowHeight) - 20;
+
+    createCanvas(dimension, dimension);
+
+    angleMode(DEGREES);
+}
+
+function draw()
+{
+    background(0);
+
+    stroke(255);
+    noFill();
+    
+    let x = width / 2;
+    let y = height / 2;
+    let xr = width * 3 / 8;
+    let yr = height * 3 / 8;
+    let n = 13;
+    let rot = (millis() / 30) % 360;
+
+    polygonPattern(x, y, xr, yr, n, rot);
+}
+
+function polygonPattern(x, y, xr, yr, n, rot)
+{
+    let px;
+    let py;
+
+    let interval = 360 / n;
+
+    //beginShape();
+    for (var angle = rot; angle < 360 + rot; angle += interval)
+    {
+        px = cos(angle) * xr + x;
+        py = sin(angle) * yr + y;
+
+        //vertex(px, py);
+
+        line(px, py, 0, 0);
+        line(px, py, 0, height);
+        line(px, py, width, 0);
+        line(px, py, width, height);
+    }
+    //endShape(CLOSE);
+}
+</script>

@@ -1,0 +1,85 @@
+<script src="lodash.min.js"></script>
+<script src="p5.min.js"></script>
+<script>
+const CHUNK_TYPES = [
+    [[1, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]],
+    [[1, 1], [1, 0], [0, 0], [0, 0], [0, 0], [0, 0]],
+    [[1, 0], [0, 1], [1, 0], [0, 0], [0, 0], [0, 0]],
+    [[1, 1], [1, 0], [0, 1], [1, 0], [0, 0], [0, 0]],
+    [[1, 0], [0, 1], [1, 1], [1, 0], [0, 0], [0, 0]],
+    [[1, 1], [1, 0], [0, 1], [1, 0], [0, 1], [1, 0]],
+    [[1, 0], [0, 1], [1, 1], [1, 0], [0, 1], [1, 0]],
+    [[1, 0], [0, 1], [1, 0], [0, 1], [1, 1], [1, 0]],
+    [[1, 0], [0, 1], [1, 0], [0, 1], [1, 0], [0, 1]],
+    [[1, 1], [1, 0], [0, 1], [1, 0], [0, 1], [1, 0]],
+    [[1, 1], [1, 0], [0, 1], [1, 1], [1, 1], [1, 0]],
+    [[1, 0], [0, 1], [1, 1], [1, 0], [0, 1], [1, 0]],
+    [[1, 0], [0, 1], [1, 0], [0, 1], [1, 1], [1, 0]],
+    [[1, 0], [0, 1], [1, 0], [0, 1], [1, 0], [0, 1]],
+    [[1, 1], [1, 0], [0, 1], [1, 0], [0, 1], [1, 1]],
+    [[1, 1], [1, 0], [0, 1], [1, 1], [1, 1], [1, 1]],
+    [[1, 0], [0, 1], [1, 1], [1, 0], [0, 1], [1, 1]]
+];
+
+function setup()
+{
+    createCanvas(800, 800);
+    noLoop();
+}
+
+function draw()
+{
+    let down = 60;
+    let across = 60;
+    let grid = Array(down).fill(null).map(() => Array(across).fill(0));
+
+    for (var i = 0; i < down; i += CHUNK_TYPES[0].length)
+    {
+        for (var j = 0; j < across; j += CHUNK_TYPES[0][0].length)
+        {
+            putChunk(grid, down, across, random(CHUNK_TYPES), i, j);
+        }
+    }
+
+    background(0);
+    drawGrid(grid, down, across, 4);
+}
+
+function putChunk(grid, down, across, chunk, row, col)
+{
+    for (var chunk_row = 0; chunk_row < chunk.length; chunk_row ++)
+    {
+        for (var chunk_col = 0; chunk_col < chunk.length; chunk_col ++)
+        {
+            if (0 <= row + chunk_row < down && 0 <= col + chunk_col < across)
+            {
+                if (chunk[chunk_row][chunk_col])
+                {
+                    console.log(row + chunk_row);
+                    grid[row + chunk_row][col + chunk_col] = 1;
+                }
+            }
+        }
+    }
+}
+
+function drawGrid(grid, down, across, dot_width)
+{
+    let vertical_res = height / down;
+    let horizontal_res = width / across;
+    push();
+    fill(255);
+    noStroke();
+    for (var row = 0; row < down; row ++)
+    {
+        for (var col = 0; col < across; col ++)
+        {
+            if (grid[row][col])
+            {
+                circle((col + 0.5) * horizontal_res, (row + 0.5) * vertical_res, dot_width);
+            }
+        }
+    }
+    pop();
+}
+</script>

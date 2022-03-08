@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<script src="p5.min.js"></script>
+<script>
+function setup()
+{
+    createCanvas(600, 600);
+}
+
+function draw()
+{
+    background(0);
+    stroke(255);
+    drawLines(40);
+}
+
+function drawLines(w_interval)
+{
+    for (var i = 0; i < height; i += w_interval)
+    {
+        line(i, 0, i, height);
+    }
+    for (var i = -height; i < height; i += w_interval)
+    {
+        line(0, i, (width - i) * 2, height);
+    }
+    for (var i = 2 * height; i > 0; i -= w_interval)
+    {
+        line(0, i, i * 2, 0);
+    }
+}
+</script>
