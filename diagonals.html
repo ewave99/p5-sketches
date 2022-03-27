@@ -1,0 +1,86 @@
+<script src="p5.min.js"></script>
+<script>
+function setup()
+{
+    createCanvas(800, 800);
+    noLoop();
+}
+
+function draw()
+{
+    background(245, 232, 201);
+
+    let cells_across = 20;
+    let cells_down = 20;
+    
+    let cell_width = width / cells_across;
+    let cell_height = height / cells_across;
+
+    noStroke();
+
+    for (var cell_y = 0; cell_y < cells_down; cell_y ++)
+    {
+        for (var cell_x = 0; cell_x < cells_across; cell_x ++)
+        {
+            fill(0, random(200, 255), 0);
+            [triangleTopRight, triangleBottomRight, triangleBottomLeft, triangleTopLeft][floor(random(0, 3))](cell_x, cell_y, cell_width, cell_height);
+        }
+    }
+}
+
+function triangleTopRight(cell_x, cell_y, cell_width, cell_height)
+{
+    let x1, y1, x2, y2, x3, y3;
+
+    x1 = cell_x * cell_width;
+    y1 = cell_y * cell_height;
+    x2 = x1 + cell_width;
+    y2 = y1;
+    x3 = x2;
+    y3 = y2 + cell_width;
+
+    triangle(x1, y1, x2, y2, x3, y3);
+}
+
+function triangleBottomRight(cell_x, cell_y, cell_width, cell_height)
+{
+    let x1, y1, x2, y2, x3, y3;
+
+    x1 = cell_x * cell_width + cell_width;
+    y1 = cell_y * cell_height;
+    x2 = x1;
+    y2 = y1 + cell_height;
+    x3 = x2 - cell_width;
+    y3 = y2;
+
+    triangle(x1, y1, x2, y2, x3, y3);
+}
+
+function triangleBottomLeft(cell_x, cell_y, cell_width, cell_height)
+{
+    let x1, y1, x2, y2, x3, y3;
+
+    x1 = cell_x * cell_width + cell_width;
+    y1 = cell_y * cell_height + cell_height;
+    x2 = x1 - cell_width;
+    y2 = y1;
+    x3 = x2;
+    y3 = y2 - cell_height;
+
+    triangle(x1, y1, x2, y2, x3, y3);
+}
+
+function triangleTopLeft(cell_x, cell_y, cell_width, cell_height)
+{
+    let x1, y1, x2, y2, x3, y3;
+
+    x1 = cell_x * cell_width;
+    y1 = cell_y * cell_height + cell_height;
+    x2 = x1;
+    y2 = y1 - cell_height;
+    x3 = x2 + cell_width;
+    y3 = y2;
+
+    triangle(x1, y1, x2, y2, x3, y3);
+}
+</script>

@@ -1,0 +1,36 @@
+<script src="p5.min.js"></script>
+<script>
+function setup()
+{
+    createCanvas(800, 800);
+    noLoop();
+}
+
+function draw()
+{
+    background(0);
+    
+    strokeWeight(2);
+
+    let x = 0;
+    while (x < width)
+    {
+        x += random(0, width * 30 / 400);
+        stroke(floor(random(50, 255)));
+        line(x, 0, x, height);
+    }
+
+    strokeWeight(1);
+
+    let left_y = 0;
+    let right_y = 0;
+    while (left_y < height && right_y < height * 4)
+    {
+        left_y = random(left_y, left_y + height / 20);
+        right_y = random(right_y, right_y + height / 5);
+
+        stroke(floor(random(50, 255)));
+        line(0, left_y, width, right_y);
+    }
+}
+</script>
