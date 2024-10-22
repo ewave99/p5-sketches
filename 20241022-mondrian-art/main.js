@@ -53,27 +53,42 @@ function generateRectangleList() {
     return stack;
 }
 
-function drawRectangles(rectangle_list) {
-    const COLOURS = ["white", "black", "red", "yellow", "lightskyblue"];
-    let colour = "";
-    let prev_colour = "";
+function drawRectangles(colour_groups) {
+    strokeWeight(10);
     stroke(0);
-    strokeWeight(5);
-    for (rectangle of rectangle_list) {
-        while (colour === prev_colour) {
-            colour = random(COLOURS);
-        }
-        prev_colour = colour;
-        fill(colour);
-        rect(...rectangle);
+    for (group of colour_groups) {
+        fill(group[0]);
+        for (rectangle of group[1])
+            rect(...rectangle);
     }
+}
+
+function generateColourGroups(rectangles) {
+    const COLOURS = ["white", "black", "red", "yellow", "lightskyblue"];
+    const NUM_GROUPS = 5;
+    let colour_groups = [];
+    let group = 0;
+    let prev_group = 0;
+    let groups_with_names = [];
+    for (let i = 0; i < NUM_GROUPS; i++)
+        colour_groups.push([]);
+    for (rectangle of rectangles) {
+        while (group === prev_group)
+            group = int(random(5));
+        prev_group = group;
+        colour_groups[group].push(rectangle);
+    }
+    for (let i = 0; i < NUM_GROUPS; i++)
+        groups_with_names.push([COLOURS[i], colour_groups[i]]);
+    return groups_with_names;
 }
 
 function drawMondrianArt() {
     background(255);
 
     let rectangle_list = generateRectangleList();
-    drawRectangles(rectangle_list);
+    let colour_groups = generateColourGroups(rectangle_list);
+    drawRectangles(colour_groups);
 
     drawMainOutline();
 }
