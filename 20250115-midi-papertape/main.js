@@ -1,5 +1,10 @@
+
+const SURDO_NOTES = {47: "hit", 33: "mute"};
+const BAR_DURATION = 1920;
+
 let break1_csv;
-let break1_data;
+
+let break1;
 
 //Preload: Load MIDI (CSV) files 
 function preload() {
@@ -8,8 +13,8 @@ function preload() {
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    break1_data = csvArrayToData(break1_csv);
-    for (let line of break1_data) console.log(line);
+    break1 = getNoteSequence(break1_csv);
+    console.log(break1);
 }
 
 function draw() {
@@ -18,6 +23,11 @@ function draw() {
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
+}
+
+function getNoteSequence(csv_array) {
+    let data = csvArrayToData(csv_array);
+    return dataToNoteSequence(data);
 }
 
 function csvArrayToData(csv_array) {
@@ -61,4 +71,37 @@ function parseValueFromField(field) {
     if (m) return m[1]; 
     
     return line;
+}
+
+function dataToNoteSequence(data) {
+    let sequence = new Object();
+    sequence.values = new Array();
+    sequence.positions = new Array();
+
+    for (let record of data) {
+        if (getEvent(record) === "Note_on_c") {
+            sequence.positions.push(getTime(record));
+            sequence.values.push(getNote(record));
+        }
+    }
+
+    return sequence;
+}
+
+function getEvent(record) {
+    return record[2];
+}
+
+function getTime(record) {
+    let value = record[1];
+    return scaleTimeValue(value);
+}
+
+function scaleTimeValue(value) {
+    return value / BAR_DURATION;
+}
+
+function getNote(record) {
+    let value = record[4];
+    return SURDO_NOTES[value];
 }
