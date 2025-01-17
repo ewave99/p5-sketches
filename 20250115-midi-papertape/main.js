@@ -6,6 +6,8 @@ let break1_csv;
 
 let break1;
 
+let paper_tape;
+
 //Preload: Load MIDI (CSV) files 
 function preload() {
     break1_csv = loadStrings("assets/csv/break1.csv");
@@ -14,11 +16,14 @@ function preload() {
 function setup() {
     createCanvas(windowWidth, windowHeight);
     break1 = getNoteSequence(break1_csv);
-    console.log(break1);
+
+    paper_tape = new PaperTape();
+    paper_tape.addNoteSequence(break1);
 }
 
 function draw() {
     background(255);
+    paper_tape.display();
 }
 
 function windowResized() {
@@ -75,13 +80,13 @@ function parseValueFromField(field) {
 
 function dataToNoteSequence(data) {
     let sequence = new Object();
-    sequence.values = new Array();
-    sequence.positions = new Array();
+    sequence.note_values = new Array();
+    sequence.note_positions = new Array();
 
     for (let record of data) {
         if (getEvent(record) === "Note_on_c") {
-            sequence.positions.push(getTime(record));
-            sequence.values.push(getNote(record));
+            sequence.note_positions.push(getTime(record));
+            sequence.note_values.push(getNote(record));
         }
     }
 
@@ -104,4 +109,24 @@ function scaleTimeValue(value) {
 function getNote(record) {
     let value = record[4];
     return SURDO_NOTES[value];
+}
+
+
+class PaperTape {
+    constructor() {
+        this.note_values = new Array();
+        this.note_positions = new Array();
+        this.current_position = 0;
+    }
+
+    addNoteSequence(note_sequence) {
+        this.note_values.push(...note_sequence.note_values);
+        
+        let total_time = this.note_positions[this.note_positions.length-1] || 0;
+        for (let position of note_sequence.note_positions) {
+            this.note_positions.push(total_time + position);
+        }
+    }
+
+    display() {}
 }
