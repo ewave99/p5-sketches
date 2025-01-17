@@ -3,22 +3,37 @@ const SURDO_NOTES = {47: "hit", 33: "mute"};
 const BAR_DURATION = 1920;
 
 let break1_csv;
+let batucada_beginning_csv;
+let batucada_loop_csv;
+let batucada_ending_csv;
 
 let break1;
+let batucada_beginning;
+let batucada_loop;
+let batucada_ending;
 
 let paper_tape;
 
 //Preload: Load MIDI (CSV) files 
 function preload() {
     break1_csv = loadStrings("assets/csv/break1.csv");
+    batucada_beginning_csv = loadStrings("assets/csv/batucada-beginning.csv");
+    batucada_loop_csv = loadStrings("assets/csv/batucada-loop.csv");
+    batucada_ending_csv = loadStrings("assets/csv/batucada-ending.csv");
 }
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
     break1 = getNoteSequence(break1_csv);
+    batucada_beginning = getNoteSequence(batucada_beginning_csv);
+    batucada_loop = getNoteSequence(batucada_loop_csv);
+    batucada_ending = getNoteSequence(batucada_ending_csv);
 
     paper_tape = new PaperTape();
     paper_tape.addNoteSequence(break1);
+    paper_tape.addNoteSequence(batucada_beginning);
+    paper_tape.addNoteSequence(batucada_loop);
+    paper_tape.addNoteSequence(batucada_ending);
 }
 
 function draw() {
