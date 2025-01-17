@@ -29,7 +29,7 @@ function setup() {
     batucada_loop = getNoteSequence(batucada_loop_csv);
     batucada_ending = getNoteSequence(batucada_ending_csv);
 
-    paper_tape = new PaperTape();
+    paper_tape = new PaperTape(width/4, (height-100)/2, width/2, 100);
     paper_tape.addNoteSequence(break1);
     paper_tape.addNoteSequence(batucada_beginning);
     paper_tape.addNoteSequence(batucada_loop);
@@ -128,10 +128,18 @@ function getNote(record) {
 
 
 class PaperTape {
-    constructor() {
+    constructor(x, y, w, h) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+
         this.note_values = new Array();
         this.note_positions = new Array();
         this.current_position = 0;
+
+        this.bars_displayed = 4;
+        this.bar_width = this.w / this.bars_displayed;
     }
 
     addNoteSequence(note_sequence) {
@@ -143,5 +151,61 @@ class PaperTape {
         }
     }
 
-    display() {}
+    display() {
+        this.drawOutline();
+
+        this.drawCrotchetLines();
+        this.drawMinimLines();
+        this.drawBarLines();
+    }
+
+    drawOutline() {
+        noFill();
+        stroke(0);
+        strokeWeight(3);
+
+        rect(this.x, this.y, this.w, this.h);
+    }
+
+    drawBarLines() {
+        stroke(0);
+        strokeWeight(2);
+
+        let x = this.x;
+        for (let i = 0; i < this.bars_displayed; i++) {
+            line(x, this.y, x, this.y+this.h);
+            x += this.bar_width;
+        }
+    }
+
+    drawMinimLines() {
+        stroke(0);
+        strokeWeight(1);
+
+        let parts = 2;
+    
+        let x = this.x;
+        let delta = this.bar_width / parts;
+        for (let i = 0; i < this.bars_displayed * parts; i++) {
+            line(x, this.y, x, this.y+this.h);
+            x += delta;
+        }
+    }
+
+    drawCrotchetLines() {
+        stroke(0);
+        strokeWeight(0.5);
+        drawingContext.setLineDash([5, 5]);
+
+        let parts = 4;
+    
+        let x = this.x;
+        let delta = this.bar_width / parts;
+        for (let i = 0; i < this.bars_displayed * parts; i++) {
+            line(x, this.y, x, this.y+this.h);
+            x += delta;
+        }
+
+        drawingContext.setLineDash([]);
+    }
 }
