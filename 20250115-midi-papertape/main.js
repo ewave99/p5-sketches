@@ -210,7 +210,6 @@ class PaperTape {
     
         let x;
         let first = Math.ceil((this.current_position-0.25)*2)/2;
-        console.log(first);
         for (let position of positions) {
             x = this.getPositionX(first + position);
             line(x, this.y, x, this.y+this.h);
@@ -229,6 +228,8 @@ class PaperTape {
         let note_text;
         for (let i = 0; i < this.note_values.length; i++) {
             x = this.getPositionX(this.note_positions[i]);
+            if (x < this.x)
+                continue;
             if (x >= this.x + this.w)
                 continue;
 
