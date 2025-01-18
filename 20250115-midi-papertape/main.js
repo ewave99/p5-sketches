@@ -38,6 +38,8 @@ function setup() {
 
 function draw() {
     background(255);
+    let time = millis();
+    paper_tape.update(time);
     paper_tape.display();
 }
 
@@ -159,6 +161,8 @@ class PaperTape {
         this.drawBarLines();
 
         this.drawNotes();
+        
+        this.drawPlayHead();
     }
 
     drawOutline() {
@@ -220,7 +224,7 @@ class PaperTape {
         let y = this.y + this.h/2;
         let note_text;
         for (let i = 0; i < this.note_values.length; i++) {
-            x = this.getNoteX(this.note_positions[i]);
+            x = this.getPositionX(this.note_positions[i]);
             if (x > this.x + this.w)
                 continue;
 
@@ -237,8 +241,8 @@ class PaperTape {
         }
     }
 
-    getNoteX(note_position) {
-        return this.x + this.bar_width * note_position;
+    getPositionX(position) {
+        return this.x + this.bar_width * position;
     }
 
     getNoteText(note_value) {
@@ -247,5 +251,20 @@ class PaperTape {
         if (note_value === "mute")
             return "M";
         return "";
+    }
+
+    drawPlayHead() {
+        let x = this.getPositionX(this.current_position);
+        if (x > this.x + this.w)
+            return;
+        stroke(255, 0, 0);
+        strokeWeight(2);
+        line(x, this.y, x, this.y+this.h);
+    }
+
+    update(time_ms) {
+        let time_s = time_ms / 1000;
+        let seconds_per_bar = 2;
+        this.current_position = time_s / seconds_per_bar;
     }
 }
