@@ -177,10 +177,13 @@ class PaperTape {
         stroke(0);
         strokeWeight(2);
 
-        let x = this.x;
-        for (let i = 0; i < this.bars_displayed; i++) {
+        let positions = [0, 1, 2, 3];
+
+        let x;
+        let first = Math.ceil(this.current_position);
+        for (let position of positions) {
+            x = this.getPositionX(first + position);
             line(x, this.y, x, this.y+this.h);
-            x += this.bar_width;
         }
     }
 
@@ -188,13 +191,13 @@ class PaperTape {
         stroke(0);
         strokeWeight(1);
 
-        let parts = 2;
+        let positions = [0.5, 1.5, 2.5, 3.5];
     
-        let x = this.x;
-        let delta = this.bar_width / parts;
-        for (let i = 0; i < this.bars_displayed * parts; i++) {
+        let x;
+        let first = Math.ceil(this.current_position-0.5);
+        for (let position of positions) {
+            x = this.getPositionX(first + position);
             line(x, this.y, x, this.y+this.h);
-            x += delta;
         }
     }
 
@@ -203,13 +206,14 @@ class PaperTape {
         strokeWeight(0.5);
         drawingContext.setLineDash([5, 5]);
 
-        let parts = 4;
+        let positions = [0.25, 0.75, 1.25, 1.75, 2.25, 2.75, 3.25, 3.75];
     
-        let x = this.x;
-        let delta = this.bar_width / parts;
-        for (let i = 0; i < this.bars_displayed * parts; i++) {
+        let x;
+        let first = Math.ceil((this.current_position-0.25)*2)/2;
+        console.log(first);
+        for (let position of positions) {
+            x = this.getPositionX(first + position);
             line(x, this.y, x, this.y+this.h);
-            x += delta;
         }
 
         drawingContext.setLineDash([]);
@@ -225,7 +229,7 @@ class PaperTape {
         let note_text;
         for (let i = 0; i < this.note_values.length; i++) {
             x = this.getPositionX(this.note_positions[i]);
-            if (x > this.x + this.w)
+            if (x >= this.x + this.w)
                 continue;
 
             note_text = this.getNoteText(this.note_values[i]);
@@ -242,7 +246,7 @@ class PaperTape {
     }
 
     getPositionX(position) {
-        return this.x + this.bar_width * position;
+        return this.x + this.bar_width * (position-this.current_position);
     }
 
     getNoteText(note_value) {
