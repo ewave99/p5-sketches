@@ -155,14 +155,13 @@ class PaperTape {
 
     display() {
         this.drawOutline();
+        this.drawHead();
 
         this.drawCrotchetLines();
         this.drawMinimLines();
         this.drawBarLines();
 
         this.drawNotes();
-        
-        this.drawPlayHead();
     }
 
     drawOutline() {
@@ -171,6 +170,16 @@ class PaperTape {
         strokeWeight(3);
 
         rect(this.x, this.y, this.w, this.h);
+    }
+
+    drawHead() {
+        fill(0);
+        noStroke();
+        let size = 20;
+        triangle(this.x, this.y+this.h,
+            this.x-size/2, this.y+this.h+size,
+            this.x+size/2, this.y+this.h+size
+        );
     }
 
     drawBarLines() {
@@ -258,18 +267,10 @@ class PaperTape {
         return "";
     }
 
-    drawPlayHead() {
-        let x = this.getPositionX(this.current_position);
-        if (x > this.x + this.w)
-            return;
-        stroke(255, 0, 0);
-        strokeWeight(2);
-        line(x, this.y, x, this.y+this.h);
-    }
-
     update(time_ms) {
         let time_s = time_ms / 1000;
         let seconds_per_bar = 2;
         this.current_position = time_s / seconds_per_bar;
     }
+    
 }
