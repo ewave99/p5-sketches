@@ -157,6 +157,8 @@ class PaperTape {
         this.drawCrotchetLines();
         this.drawMinimLines();
         this.drawBarLines();
+
+        this.drawNotes();
     }
 
     drawOutline() {
@@ -207,5 +209,43 @@ class PaperTape {
         }
 
         drawingContext.setLineDash([]);
+    }
+    
+    drawNotes() {
+        textAlign(CENTER, CENTER);
+        let diameter = 20;
+        textSize(diameter-5);
+
+        let x;
+        let y = this.y + this.h/2;
+        let note_text;
+        for (let i = 0; i < this.note_values.length; i++) {
+            x = this.getNoteX(this.note_positions[i]);
+            if (x > this.x + this.w)
+                continue;
+
+            note_text = this.getNoteText(this.note_values[i]);
+
+            fill(255);
+            stroke(0);
+            strokeWeight(1);
+            circle(x, y, diameter);
+
+            fill(0);
+            noStroke();
+            text(note_text, x, y);
+        }
+    }
+
+    getNoteX(note_position) {
+        return this.x + this.bar_width * note_position;
+    }
+
+    getNoteText(note_value) {
+        if (note_value === "hit")
+            return "H";
+        if (note_value === "mute")
+            return "M";
+        return "";
     }
 }
